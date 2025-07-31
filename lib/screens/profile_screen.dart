@@ -23,208 +23,194 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Profile Header
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      child: Text(
-                        userProfile.displayName?.substring(0, 1).toUpperCase() ?? 'U',
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      userProfile.displayName ?? 'User',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      userProfile.email,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                // Profile Header
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
                       children: [
-                        _buildStatItem('Posts', '3'),
-                        _buildStatItem('Saved', '12'),
-                        _buildStatItem('Matches', '8'),
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          child: Text(
+                            userProfile.displayName?.substring(0, 1).toUpperCase() ?? 'U',
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          userProfile.displayName ?? 'User',
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          userProfile.email,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildStatItem('Posts', '3'),
+                            _buildStatItem('Saved', '12'),
+                            _buildStatItem('Matches', '8'),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Profile Details
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Profile Details',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildDetailRow('Age', userProfile.age?.toString() ?? 'Not specified'),
-                    _buildDetailRow('Gender', userProfile.gender ?? 'Not specified'),
-                    _buildDetailRow('Occupation', userProfile.occupation ?? 'Not specified'),
-                    _buildDetailRow('Budget', userProfile.monthlyBudget != null ? '\$${userProfile.monthlyBudget!.toInt()}/month' : 'Not specified'),
-                    _buildDetailRow('Move-in Date', userProfile.preferredMoveInDate != null ? _formatDate(userProfile.preferredMoveInDate!) : 'Not specified'),
-                    if (userProfile.preferredLocations != null && userProfile.preferredLocations!.isNotEmpty)
-                      _buildDetailRow('Preferred Locations', userProfile.preferredLocations!.join(', ')),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Lifestyle Tags
-            if (userProfile.lifestyleTags != null && userProfile.lifestyleTags!.isNotEmpty)
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Lifestyle',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: userProfile.lifestyleTags!.map((tag) => Chip(
-                          label: Text(tag),
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                        )).toList(),
-                      ),
-                    ],
                   ),
                 ),
-              ),
-            const SizedBox(height: 16),
+                const SizedBox(height: 24),
 
-            // My Posts
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Profile Details
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'My Posts',
+                          'Profile Details',
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('View all posts coming soon!')),
-                            );
-                          },
-                          child: const Text('View All'),
-                        ),
+                        const SizedBox(height: 16),
+                        _buildDetailRow('Age', userProfile.age?.toString() ?? 'Not specified'),
+                        _buildDetailRow('Gender', userProfile.gender ?? 'Not specified'),
+                        _buildDetailRow('Occupation', userProfile.occupation ?? 'Not specified'),
+                        _buildDetailRow('Budget', userProfile.monthlyBudget != null ? '\$${userProfile.monthlyBudget!.toInt()}/month' : 'Not specified'),
+                        _buildDetailRow('Move-in Date', userProfile.preferredMoveInDate != null ? _formatDate(userProfile.preferredMoveInDate!) : 'Not specified'),
+                        if (userProfile.preferredLocations != null && userProfile.preferredLocations!.isNotEmpty)
+                          _buildDetailRow('Preferred Locations', userProfile.preferredLocations!.join(', ')),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    ..._getDemoPosts().map((post) => _buildPostItem(post)),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Lifestyle Tags
+                if (userProfile.lifestyleTags != null && userProfile.lifestyleTags!.isNotEmpty)
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Lifestyle',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: userProfile.lifestyleTags!.map((tag) => Chip(
+                              label: Text(tag),
+                              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                              labelStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                const SizedBox(height: 24),
+
+                // My Posts
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'My Posts',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Create post feature coming soon!')),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        ..._getDemoPosts().map((post) => _buildPostItem(post)),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Action Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Edit profile feature coming soon!')),
+                          );
+                        },
+                        icon: const Icon(Icons.edit),
+                        label: const Text('Edit Profile'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Theme.of(context).colorScheme.primary,
+                          side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () => _showLogoutDialog(context),
+                        icon: const Icon(Icons.logout),
+                        label: const Text('Logout'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 24),
+              ],
             ),
-            const SizedBox(height: 16),
-
-            // Settings & Actions
-            Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text('Edit Profile'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Edit profile coming soon!')),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.notifications),
-                    title: const Text('Notifications'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Notifications settings coming soon!')),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.privacy_tip),
-                    title: const Text('Privacy'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Privacy settings coming soon!')),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.help),
-                    title: const Text('Help & Support'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Help & support coming soon!')),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.logout, color: Colors.red),
-                    title: const Text('Logout', style: TextStyle(color: Colors.red)),
-                    onTap: () {
-                      _showLogoutDialog(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

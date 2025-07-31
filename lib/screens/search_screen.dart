@@ -13,7 +13,7 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
   PostType? _selectedType;
   String? _selectedLocation;
   double? _maxBudget;
-  List<String> _selectedLifestyleTags = [];
+  final Set<String> _selectedLifestyleTags = {};
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
 
@@ -60,47 +60,51 @@ class _SearchScreenState extends State<SearchScreen> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF6366F1),
-        ),
-        child: SafeArea(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: Column(
-              children: [
-                // Search Header
-                _buildSearchHeader(),
-                
-                // Content
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFF6366F1),
+            ),
+            child: SafeArea(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Column(
+                  children: [
+                    // Search Header
+                    _buildSearchHeader(),
+                    
+                    // Content
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            // Active Filters
+                            if (_hasActiveFilters()) _buildActiveFilters(),
+                            
+                            // Results
+                            Expanded(
+                              child: _getFilteredPosts().isEmpty
+                                  ? _buildEmptyState()
+                                  : _buildResultsList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        // Active Filters
-                        if (_hasActiveFilters()) _buildActiveFilters(),
-                        
-                        // Results
-                        Expanded(
-                          child: _getFilteredPosts().isEmpty
-                              ? _buildEmptyState()
-                              : _buildResultsList(),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

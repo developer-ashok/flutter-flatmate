@@ -39,4 +39,12 @@ A modern Flutter app to help users find roommates, offer rooms, or team up for s
 
 ---
 
+## Developer Contact
+
+- **Name:** Ashok Chandrapal
+- **Phone:** +91 9033359874
+- **Email:** developer7039@gmail.com
+- **GitHub:** [developer-ashok](https://github.com/developer-ashok)
+- **LinkedIn:** [ashok-chandrapal](https://www.linkedin.com/in/ashok-chandrapal/)
+
 Made with ❤️ using Flutter & Firebase.

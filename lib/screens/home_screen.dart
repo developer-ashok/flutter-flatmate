@@ -34,104 +34,108 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF6366F1),
-        ),
-        child: SafeArea(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: CustomScrollView(
-              slivers: [
-                // Custom App Bar
-                SliverAppBar(
-                  expandedHeight: 120,
-                  floating: false,
-                  pinned: true,
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: const Text(
-                      'Flatmate Finder',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    ),
-                    background: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF6366F1),
-                      ),
-                    ),
-                  ),
-                  actions: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.2),
-                          width: 1,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFF6366F1),
+            ),
+            child: SafeArea(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: CustomScrollView(
+                  slivers: [
+                    // Custom App Bar
+                    SliverAppBar(
+                      expandedHeight: 120,
+                      floating: false,
+                      pinned: true,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      flexibleSpace: FlexibleSpaceBar(
+                        title: const Text(
+                          'Flatmate Finder',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        background: Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF6366F1),
+                          ),
                         ),
                       ),
-                      child: IconButton(
-                        icon: const Icon(Icons.notifications_outlined, color: Colors.white),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text('Notifications coming soon!'),
-                              backgroundColor: const Color(0xFF6366F1),
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      actions: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1,
                             ),
-                          );
-                        },
+                          ),
+                          child: IconButton(
+                            icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Notifications coming soon!'),
+                                  backgroundColor: const Color(0xFF6366F1),
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Content
+                    SliverToBoxAdapter(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Welcome Section
+                              _buildWelcomeSection(),
+                              const SizedBox(height: 32),
+
+                              // Quick Actions
+                              _buildQuickActions(),
+                              const SizedBox(height: 32),
+
+                              // Recent Posts Header
+                              _buildPostsHeader(),
+                              const SizedBox(height: 20),
+
+                              // Posts List
+                              ..._getDemoPosts().map((post) => PostCard(post: post)),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-
-                // Content
-                SliverToBoxAdapter(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Welcome Section
-                          _buildWelcomeSection(),
-                          const SizedBox(height: 32),
-
-                          // Quick Actions
-                          _buildQuickActions(),
-                          const SizedBox(height: 32),
-
-                          // Recent Posts Header
-                          _buildPostsHeader(),
-                          const SizedBox(height: 20),
-
-                          // Posts List
-                          ..._getDemoPosts().map((post) => PostCard(post: post)),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -416,189 +420,193 @@ class _PostCardState extends State<PostCard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 5),
+    return AnimatedBuilder(
+      animation: _scaleAnimation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          children: [
-            // Header with type badge and price
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: _getPostTypeGradient(widget.post.type)[0],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      _getPostTypeText(widget.post.type),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      '\$${widget.post.rentOrBudget.toInt()}/month',
-                      style: const TextStyle(
-                        color: Color(0xFF10B981),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Content
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.post.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.post.description,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      height: 1.4,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Location and time
-                  Row(
+            child: Column(
+              children: [
+                // Header with type badge and price
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
                     children: [
-                      Icon(Icons.location_on_outlined, size: 16, color: Colors.grey[600]),
-                      const SizedBox(width: 4),
-                      Text(
-                        widget.post.addressOrLocation,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _getPostTypeGradient(widget.post.type)[0],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          _getPostTypeText(widget.post.type),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                       const Spacer(),
-                      Text(
-                        _getTimeAgo(widget.post.createdAt),
-                        style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10B981).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '\$${widget.post.rentOrBudget.toInt()}/month',
+                          style: const TextStyle(
+                            color: Color(0xFF10B981),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                ),
 
-                  // Lifestyle tags
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: widget.post.householdLifestyle.take(3).map((tag) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF6366F1).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        tag,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Color(0xFF6366F1),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    )).toList(),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Action buttons
-                  Row(
+                // Content
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('Contact feature coming soon!'),
-                                backgroundColor: const Color(0xFF6366F1),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.message_outlined),
-                          label: const Text('Contact'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF6366F1),
-                            side: const BorderSide(color: Color(0xFF6366F1)),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
+                      Text(
+                        widget.post.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              _isLiked = !_isLiked;
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(_isLiked ? 'Post saved!' : 'Post unsaved'),
-                                backgroundColor: const Color(0xFF10B981),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              ),
-                            );
-                          },
-                          icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border),
-                          label: Text(_isLiked ? 'Saved' : 'Save'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _isLiked ? const Color(0xFF10B981) : const Color(0xFF6366F1),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
+                      const SizedBox(height: 8),
+                      Text(
+                        widget.post.description,
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          height: 1.4,
                         ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Location and time
+                      Row(
+                        children: [
+                          Icon(Icons.location_on_outlined, size: 16, color: Colors.grey[600]),
+                          const SizedBox(width: 4),
+                          Text(
+                            widget.post.addressOrLocation,
+                            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                          ),
+                          const Spacer(),
+                          Text(
+                            _getTimeAgo(widget.post.createdAt),
+                            style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Lifestyle tags
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: widget.post.householdLifestyle.take(3).map((tag) => Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6366F1).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            tag,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF6366F1),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )).toList(),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Action buttons
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Contact feature coming soon!'),
+                                    backgroundColor: const Color(0xFF6366F1),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.message_outlined),
+                              label: const Text('Contact'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF6366F1),
+                                side: const BorderSide(color: Color(0xFF6366F1)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  _isLiked = !_isLiked;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(_isLiked ? 'Post saved!' : 'Post unsaved'),
+                                    backgroundColor: const Color(0xFF10B981),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  ),
+                                );
+                              },
+                              icon: Icon(_isLiked ? Icons.favorite : Icons.favorite_border),
+                              label: Text(_isLiked ? 'Saved' : 'Save'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _isLiked ? const Color(0xFF10B981) : const Color(0xFF6366F1),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

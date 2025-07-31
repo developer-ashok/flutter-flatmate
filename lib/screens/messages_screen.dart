@@ -11,13 +11,17 @@ class MessagesScreen extends StatelessWidget {
         title: const Text('Messages'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _getDemoConversations().length,
-        itemBuilder: (context, index) {
-          final conversation = _getDemoConversations()[index];
-          return ConversationCard(conversation: conversation);
-        },
+      body: Stack(
+        children: [
+          ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: _getDemoConversations().length,
+            itemBuilder: (context, index) {
+              final conversation = _getDemoConversations()[index];
+              return ConversationCard(conversation: conversation);
+            },
+          ),
+        ],
       ),
     );
   }
